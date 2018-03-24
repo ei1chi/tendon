@@ -6,7 +6,7 @@ import (
 )
 
 type Sprite struct {
-	image    *et.Image
+	Image    *et.Image
 	halfSize complex128
 }
 
