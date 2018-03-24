@@ -6,7 +6,7 @@ import (
 
 var (
 	IsPressed, IsJustPressed bool
-	Cursor                   complex128
+	CursorPos                complex128
 )
 
 func updateInput() {
@@ -18,7 +18,7 @@ func updateInput() {
 			IsPressed = true
 		}
 	}
-	Cursor = complex(float64(x), float64(y))
+	CursorPos = complex(float64(x), float64(y))
 
 	if p {
 		if !IsPressed {
