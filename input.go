@@ -9,7 +9,7 @@ var (
 	CursorPos                complex128
 )
 
-func updateInput() {
+func UpdateInput() {
 	x, y := et.CursorPosition()
 	p := et.IsMouseButtonPressed(et.MouseButtonLeft)
 	for _, t := range et.Touches() {
