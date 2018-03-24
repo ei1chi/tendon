@@ -13,8 +13,8 @@ type Sprite struct {
 func NewSprite(path string) (*Sprite, error) {
 	s := &Sprite{}
 	var err error
-	s.image, _, err = ebitenutil.NewImageFromFile(path, et.FilterDefault)
-	w, h := s.image.Size()
+	s.Image, _, err = ebitenutil.NewImageFromFile(path, et.FilterDefault)
+	w, h := s.Image.Size()
 	s.halfSize = complex(float64(w)/2, float64(h)/2)
 	return s, err
 }
