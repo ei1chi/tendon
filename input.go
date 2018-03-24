@@ -5,8 +5,8 @@ import (
 )
 
 var (
-	Pressed, JustPressed bool
-	Cursor               complex128
+	IsPressed, IsJustPressed bool
+	Cursor                   complex128
 )
 
 func updateInput() {
@@ -15,20 +15,20 @@ func updateInput() {
 	for _, t := range et.Touches() {
 		x, y = t.Position()
 		if x+y > 0 {
-			Pressed = true
+			IsPressed = true
 		}
 	}
 	Cursor = complex(float64(x), float64(y))
 
 	if p {
-		if !Pressed {
-			JustPressed = true
+		if !IsPressed {
+			IsJustPressed = true
 		} else {
-			JustPressed = false
+			IsJustPressed = false
 		}
-		Pressed = true
+		IsPressed = true
 	} else {
-		Pressed = false
-		JustPressed = false
+		IsPressed = false
+		IsJustPressed = false
 	}
 }
