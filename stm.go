@@ -8,6 +8,10 @@ func (s *Stm) Update() {
 	s.count += 1
 }
 
+func (s *Stm) Get() int {
+	return s.state
+}
+
 func (s *Stm) Elapsed() int {
 	return s.count
 }
