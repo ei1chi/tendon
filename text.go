@@ -86,12 +86,12 @@ func NewTextf(face font.Face, color color.Color, format string, args ...interfac
 	return NewText(face, color, fmt.Sprintf(format, args...))
 }
 
-func (t *Text) Draw(image *et.Image, x, y int, align Align) {
+func (t *Text) Draw(image *et.Image, x, y float64, align Align) {
 	switch align {
 	case AlignCenter:
-		x = x - t.W/2
+		x = x - float64(t.W)/2
 	case AlignRight:
-		x = x - t.W
+		x = x - float64(t.W)
 	}
-	text.Draw(image, t.Text, t.Face, x, y, t.Color)
+	text.Draw(image, t.Text, t.Face, int(x), int(y), t.Color)
 }
