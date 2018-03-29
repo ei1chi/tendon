@@ -8,7 +8,7 @@ import (
 
 type Scene interface {
 	Load()
-	Update(screen *et.Image) (Scene, error)
+	Update(screen *et.Image) error
 }
 
 func StartLoading(s Scene, wg *sync.WaitGroup) {
