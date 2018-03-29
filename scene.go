@@ -34,7 +34,7 @@ func (s *SceneBase) StartNextLoading(next Scene) error {
 		return errors.New("next loading has already started!")
 	}
 	if s.next == nil {
-		return errors.New("next has not created!")
+		return errors.New("next is nil!!")
 	}
 	s.task = make(chan struct{}, 1)
 	s.next = next
