@@ -2,7 +2,6 @@
 package tendon
 
 import (
-	"fmt"
 	"image/color"
 	"io/ioutil"
 
@@ -60,38 +59,40 @@ const (
 )
 
 type Text struct {
-	Face    font.Face
-	Color   color.Color
-	Text    string
-	W, H    int
-	Advance int
+	Face  font.Face
+	Rect  Rect
+	Align Align
 }
 
-func NewText(face font.Face, color color.Color, text string) *Text {
-	w, h, advance := MeasureText(text, face)
-	return &Text{
-		Face:    face,
-		Color:   color,
-		Text:    text,
-		W:       w,
-		H:       h,
-		Advance: advance,
-	}
+type Typer struct {
+	Face  font.Face
+	Rect  Rect
+	Align Align
 }
 
-func NewTextf(face font.Face, color color.Color, format string, args ...interface{}) *Text {
-	if len(args) == 0 {
-		return NewText(face, color, format)
-	}
-	return NewText(face, color, fmt.Sprintf(format, args...))
+func NewTyper(tt *truetype.Font, base Rect, spacing float64, align Align) *Typer {
+	t := &Typer{}
+	r := base
+	r.Bottom = r.Top + r.Height()/spacing
+	t.Rect = r
+	t.Face = truetype.NewFace(tt, &truetype.Options{
+		Size:    t.Rect.Height(),
+		DPI:     dpi,
+		Hinting: font.HintingFull,
+	})
+	t.Align = align
+	return t
 }
 
-func (t *Text) Draw(image *et.Image, x, y float64, align Align) {
-	switch align {
+func (t *Typer) Draw(image *et.Image, str string, clr color.Color) {
+	var x, y float64
+	switch t.Align {
+	case AlignLeft:
+		x, y = t.Rect.AnchorPos(7)
 	case AlignCenter:
-		x = x - float64(t.W)/2
+		x, y = t.Rect.AnchorPos(8)
 	case AlignRight:
-		x = x - float64(t.W)
+		x, y = t.Rect.AnchorPos(9)
 	}
-	text.Draw(image, t.Text, t.Face, int(x), int(y), t.Color)
+	text.Draw(image, str, t.Face, int(x+0.5), int(y+0.5), clr)
 }
