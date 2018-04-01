@@ -5,8 +5,8 @@ import (
 )
 
 var (
-	IsPressed, IsJustPressed bool
-	CursorPos                complex128
+	IsPressed, IsJustPressed, IsJustReleased bool
+	CursorPos                                complex128
 )
 
 func UpdateInput() {
@@ -20,15 +20,17 @@ func UpdateInput() {
 	}
 	CursorPos = complex(float64(x), float64(y))
 
+	IsJustPressed = false
+	IsJustReleased = false
 	if p {
 		if !IsPressed {
 			IsJustPressed = true
-		} else {
-			IsJustPressed = false
 		}
 		IsPressed = true
 	} else {
+		if IsPressed {
+			IsJustReleased = true
+		}
 		IsPressed = false
-		IsJustPressed = false
 	}
 }

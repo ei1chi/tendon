@@ -50,49 +50,56 @@ func MeasureText(text string, face font.Face) (int, int, int) {
 	return w, h, advance
 }
 
-type Align int
-
-const (
-	AlignLeft Align = iota
-	AlignCenter
-	AlignRight
-)
-
 type Text struct {
-	Face  font.Face
-	Rect  Rect
-	Align Align
+	Face   font.Face
+	Str    string
+	Bounds Rect
+	Anchor int
 }
 
-type Typer struct {
-	Face  font.Face
-	Rect  Rect
-	Align Align
-}
-
-func NewTyper(tt *truetype.Font, base Rect, spacing float64, align Align) *Typer {
-	t := &Typer{}
-	r := base
-	r.Bottom = r.Top + r.Height()/spacing
-	t.Rect = r
-	t.Face = truetype.NewFace(tt, &truetype.Options{
-		Size:    t.Rect.Height(),
-		DPI:     dpi,
-		Hinting: font.HintingFull,
-	})
-	t.Align = align
-	return t
-}
-
-func (t *Typer) Draw(image *et.Image, str string, clr color.Color) {
-	var x, y float64
-	switch t.Align {
-	case AlignLeft:
-		x, y = t.Rect.AnchorPos(7)
-	case AlignCenter:
-		x, y = t.Rect.AnchorPos(8)
-	case AlignRight:
-		x, y = t.Rect.AnchorPos(9)
+func NewText(tt *truetype.Font, size float64, anchor int, str string) *Text {
+	face := NewFontFace(tt, size)
+	b, _ := font.BoundString(face, str)
+	w := (b.Max.X - b.Min.X).Ceil()
+	h := (-b.Min.Y).Ceil()
+	r := Rect{
+		Left:   0,
+		Top:    0,
+		Right:  float64(w),
+		Bottom: float64(h),
 	}
-	text.Draw(image, str, t.Face, int(x+0.5), int(y+0.5), clr)
+	return &Text{
+		Face:   face,
+		Str:    str,
+		Bounds: r,
+		Anchor: anchor,
+	}
+}
+
+func (t *Text) SetText(str string) {
+	b, _ := font.BoundString(t.Face, str)
+	w := (b.Max.X - b.Min.X).Ceil()
+	h := (-b.Min.Y).Ceil()
+	r := Rect{
+		Left:   0,
+		Top:    0,
+		Right:  float64(w),
+		Bottom: float64(h),
+	}
+	t.Str = str
+	t.Bounds = r
+}
+
+// DrawA draws text at Absolute position
+func (t *Text) DrawA(image *et.Image, x, y float64, clr color.Color) {
+	w, h := t.Bounds.AnchorPos(t.Anchor)
+	x -= w
+	y += t.Bounds.Bottom - h
+	text.Draw(image, t.Str, t.Face, int(x+0.5), int(y+0.5), clr)
+}
+
+// DrawR draw text on the Rect
+func (t *Text) DrawR(image *et.Image, rect Rect, clr color.Color) {
+	x, y := rect.AnchorPos(t.Anchor)
+	t.DrawA(image, x, y, clr)
 }
