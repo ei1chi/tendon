@@ -5,7 +5,7 @@ import (
 	"math/cmplx"
 )
 
-const around = 4.0
+const Around = 4.0
 
 func Powi(angle float64) complex128 {
 	return cmplx.Pow(1i, complex(angle, 0))

@@ -103,3 +103,19 @@ func (t *Text) DrawR(image *et.Image, rect Rect, clr color.Color) {
 	x, y := rect.AnchorPos(t.Anchor)
 	t.DrawA(image, x, y, clr)
 }
+
+type TextBox struct {
+	T *Text
+	R Rect
+}
+
+func NewTextBox(r Rect, tt *truetype.Font, size float64, anchor int, str string) *TextBox {
+	t := &TextBox{}
+	t.T = NewText(tt, size, anchor, str)
+	t.R = r
+	return t
+}
+
+func (t *TextBox) Draw(image *et.Image, clr color.Color) {
+	t.T.DrawR(image, t.R, clr)
+}
