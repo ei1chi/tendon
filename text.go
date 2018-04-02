@@ -90,18 +90,11 @@ func (t *Text) SetText(str string) {
 	t.Bounds = r
 }
 
-// DrawA draws text at Absolute position
-func (t *Text) DrawA(image *et.Image, x, y float64, clr color.Color) {
+func (t *Text) Draw(image *et.Image, x, y float64, clr color.Color) {
 	w, h := t.Bounds.AnchorPos(t.Anchor)
 	x -= w
 	y += t.Bounds.Bottom - h
 	text.Draw(image, t.Str, t.Face, int(x+0.5), int(y+0.5), clr)
-}
-
-// DrawR draw text on the Rect
-func (t *Text) DrawR(image *et.Image, rect Rect, clr color.Color) {
-	x, y := rect.AnchorPos(t.Anchor)
-	t.DrawA(image, x, y, clr)
 }
 
 type TextBox struct {
@@ -116,6 +109,15 @@ func NewTextBox(r Rect, tt *truetype.Font, size float64, anchor int, str string)
 	return t
 }
 
-func (t *TextBox) Draw(image *et.Image, clr color.Color) {
-	t.T.DrawR(image, t.R, clr)
+func (t *TextBox) Draw(image *et.Image, ofsx, ofsy float64, clr color.Color) {
+	x, y := t.R.AnchorPos(t.T.Anchor)
+	x += ofsx
+	y += ofsy
+	t.T.Draw(image, x, y, clr)
+}
+
+func (t *TextBox) Fit() *TextBox {
+	w, h, _ := MeasureText(t.T.Str, t.T.Face)
+	t.R = t.R.SnapInside(t.T.Anchor, float64(w), float64(h))
+	return t
 }

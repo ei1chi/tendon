@@ -18,9 +18,10 @@ func AbsSq(c complex128) float64 {
 func DisplayScale(scrw, scrh float64) float64 {
 	w, h, err := DeviceSize()
 	s := 1.0
-	if err != nil {
-		s, sh := w/scrw, h/scrh
-		if s < sh {
+	if err == nil {
+		s = w / scrw
+		sh := h / scrh
+		if s > sh {
 			s = sh
 		}
 	}

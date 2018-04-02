@@ -58,7 +58,7 @@ func (r Rect) SnapInside(anchor int, w, h float64) Rect {
 		rect.Left = r.Left
 		rect.Right = r.Right + w
 	case 2, 5, 8: // snap center
-		center := r.Width() / 2
+		center := r.Left + r.Width()/2
 		rect.Left = center - w/2
 		rect.Right = center + w/2
 	case 3, 6, 9: // snap right
@@ -70,7 +70,7 @@ func (r Rect) SnapInside(anchor int, w, h float64) Rect {
 		rect.Top = r.Top
 		rect.Bottom = r.Bottom + h
 	case 4, 5, 6: // snap center
-		center := r.Height() / 2
+		center := r.Top + r.Height()/2
 		rect.Top = center - h/2
 		rect.Bottom = center + h/2
 	case 7, 8, 9: // snap bottom
@@ -90,7 +90,7 @@ func (r Rect) SnapOutside(anchor int, w, h float64) Rect {
 		rect.Left = r.Left - w
 		rect.Right = r.Left
 	case 2, 8: // snap center
-		center := r.Width() / 2
+		center := r.Left + r.Width()/2
 		rect.Left = center - w/2
 		rect.Right = center + w/2
 	case 3, 6, 9: // snap right
@@ -102,7 +102,7 @@ func (r Rect) SnapOutside(anchor int, w, h float64) Rect {
 		rect.Top = r.Top - h
 		rect.Bottom = r.Top
 	case 4, 6: // snap center
-		center := r.Height() / 2
+		center := r.Top + r.Height()/2
 		rect.Top = center - h/2
 		rect.Bottom = center + h/2
 	case 7, 8, 9: // snap bottom

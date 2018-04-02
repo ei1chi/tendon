@@ -41,7 +41,12 @@ func NewAtlas(path string) (*Atlas, error) {
 		return nil, err
 	}
 
-	b, err := ioutil.ReadFile(path + ".json")
+	f, err := ebitenutil.OpenFile(path + ".json")
+	if err != nil {
+		return nil, err
+	}
+
+	b, err := ioutil.ReadAll(f)
 	if err != nil {
 		return nil, err
 	}
