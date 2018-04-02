@@ -15,7 +15,7 @@ func UpdateInput() {
 	for _, t := range et.Touches() {
 		x, y = t.Position()
 		if x+y > 0 {
-			IsPressed = true
+			p = true
 		}
 	}
 	CursorPos = complex(float64(x), float64(y))
