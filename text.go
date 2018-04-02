@@ -57,8 +57,7 @@ type Text struct {
 	Anchor int
 }
 
-func NewText(tt *truetype.Font, size float64, anchor int, str string) *Text {
-	face := NewFontFace(tt, size)
+func NewText(face font.Face, anchor int, str string) *Text {
 	b, _ := font.BoundString(face, str)
 	w := (b.Max.X - b.Min.X).Ceil()
 	h := (-b.Min.Y).Ceil()
@@ -102,9 +101,9 @@ type TextBox struct {
 	R Rect
 }
 
-func NewTextBox(r Rect, tt *truetype.Font, size float64, anchor int, str string) *TextBox {
+func NewTextBox(r Rect, face font.Face, anchor int, str string) *TextBox {
 	t := &TextBox{}
-	t.T = NewText(tt, size, anchor, str)
+	t.T = NewText(face, anchor, str)
 	t.R = r
 	return t
 }
